@@ -12,7 +12,7 @@ const Home = () => {
   
   const { search } = useLocation();
   const category = decodeURIComponent(search.split("=")[1]);
-  console.log(category);
+  // console.log(category);
 
   const [filteredProduct , setfilteredProduct] = useState(null);
 

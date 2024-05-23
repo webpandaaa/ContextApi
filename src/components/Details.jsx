@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Loading from './Loading';
 import { ProductContext } from '../utils/Context';
+import { toast } from 'react-toastify';
+
 
 const Details = () => {
   const navigate = useNavigate();
@@ -25,16 +27,22 @@ const Details = () => {
       {
         setproduct(products.filter((p) => p.id == id)[0]);
       }
+
+      
   },[]);
-
-
 
   const deleteHandler = (id) =>{
     const filteredProducts = products.filter((p) => p.id !== id);
     setproduct(filteredProducts);
     localStorage.setItem("products" , JSON.stringify(filteredProducts));
+    toast.success("product successfully Deleted!");
     navigate("/");
+    
   }
+
+
+
+  
 
 
 

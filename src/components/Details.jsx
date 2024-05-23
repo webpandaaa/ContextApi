@@ -1,26 +1,40 @@
 import axios from '../utils/axios';
-import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Loading from './Loading';
+import { ProductContext } from '../utils/Context';
 
 const Details = () => {
-
+  const navigate = useNavigate();
+  const [products , setproducts] = useContext(ProductContext);
   const [product , setproduct] = useState(null);
-
   const {id} = useParams();
-  const getsingleproducts = async () => {
-    try{
-      const {data} = await axios.get(`/products/${id}`);
-      setproduct(data);
-    }catch(e){
-      console.log(e);
-    }
-  };
+  
+  // const getsingleproducts = async () => {
+  //   try{
+  //     const {data} = await axios.get(`/products/${id}`);
+  //     setproduct(data);
+  //   }catch(e){
+  //     console.log(e);
+  //   }
+  // };
 
 
   useEffect(()=>{
-    getsingleproducts();
+    if(!product)
+      {
+        setproduct(products.filter((p) => p.id == id)[0]);
+      }
   },[]);
+
+
+
+  const deleteHandler = (id) =>{
+    const filteredProducts = products.filter((p) => p.id !== id);
+    setproduct(filteredProducts);
+    localStorage.setItem("products" , JSON.stringify(filteredProducts));
+    navigate("/");
+  }
 
 
 
@@ -38,8 +52,8 @@ const Details = () => {
             <p className='mb-5'>
                 {product.description}
             </p>
-            <Link className='py-2  px-5 border rounded border-blue-500 text-blue-300' >Edit</Link>
-            <Link className='py-2 ml-5 px-5 border rounded border-red-500 text-red-300' >Delete</Link>
+            <Link to={`/edit/${product.id}`} className='py-2  px-5 border rounded border-blue-500 text-blue-300' >Edit</Link>
+            <button onClick={() => deleteHandler(product.id)} className='py-2 ml-5 px-5 border rounded border-red-500 text-red-300' >Delete</button>
         </div>
       
     </div>
